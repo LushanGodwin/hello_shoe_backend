@@ -1,4 +1,4 @@
 package lk.ijse.helloshoesbackend.repository;
 
-public class AdminPanelServiceDao {
+public class AdminPanelDao {
 }

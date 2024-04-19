@@ -1,4 +1,4 @@
 package lk.ijse.helloshoesbackend.repository;
 
-public class InventoryServiceDao {
+public class EmployeeDao {
 }
