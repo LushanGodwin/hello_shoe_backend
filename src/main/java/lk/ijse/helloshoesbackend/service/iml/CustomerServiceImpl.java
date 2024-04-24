@@ -25,11 +25,11 @@ public class CustomerServiceImpl implements CustomerService {
         return mapping.toCustomerDTO(java.util.Optional.of(customerDao.save(mapping.toCustomerEntity(customerDTO))));
     }
 
-    /*@Override
+    @Override
     public CustomerDTO getCustomer(String id) {
         if (!customerDao.existsById(id));
         return mapping.toCustomerDTO(customerDao.findById(id));
-    }*/
+    }
 
     /*@Override
     public List<CustomerDTO> getAllCustomer() {

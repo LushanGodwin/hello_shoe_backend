@@ -25,10 +25,10 @@ public class Customer {
         return customerService.saveCustomer(customerDTO);
     }
 
-    /*@GetMapping(value = "/{id}",produces = "application/json")
+    @GetMapping(value = "/{id}",produces = "application/json")
     public ResponseEntity<?> getCustomer(@PathVariable ("id") String id){
        return ResponseEntity.ok(customerService.getCustomer(id));
-    }*/
+    }
 
     /*@GetMapping(produces = "application/json")
     public ResponseEntity<?> getAllCustomer(){
