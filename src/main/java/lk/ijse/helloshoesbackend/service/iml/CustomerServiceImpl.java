@@ -2,6 +2,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.CustomerDTO;
+import lk.ijse.helloshoesbackend.entity.CustomerEntity;
 import lk.ijse.helloshoesbackend.repository.CustomerDao;
 import lk.ijse.helloshoesbackend.service.CustomerService;
 import lk.ijse.helloshoesbackend.util.Mapping;
@@ -10,6 +11,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,5 +37,17 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerDTO> getAllCustomer() {
         return mapping.toCustomerDTOList(customerDao.findAll());
     }
+
+    @Override
+    public boolean deleteCustomer(String id) {
+        Optional<CustomerEntity> customer = customerDao.findById(id);
+        if (customer.isPresent()){
+            customerDao.delete(customer.get());
+            return true;
+        }else {
+            return false;
+        }
+    }
+
 
 }

@@ -4,6 +4,7 @@ import lk.ijse.helloshoesbackend.dto.CustomerDTO;
 import lk.ijse.helloshoesbackend.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,5 +34,10 @@ public class Customer {
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAllCustomer(){
         return ResponseEntity.ok(customerService.getAllCustomer());
+    }
+
+    @DeleteMapping(value = "/{id}",produces = "application/json")
+    public boolean deleteCustomer(@PathVariable("id") String id){
+        return customerService.deleteCustomer(id);
     }
 }
