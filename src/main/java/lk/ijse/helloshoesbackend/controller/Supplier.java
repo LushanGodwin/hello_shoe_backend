@@ -3,6 +3,7 @@ package lk.ijse.helloshoesbackend.controller;
 import lk.ijse.helloshoesbackend.dto.SupplierDTO;
 import lk.ijse.helloshoesbackend.service.SupplierService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,4 +22,10 @@ public class Supplier {
     public SupplierDTO saveSupplier(@RequestBody SupplierDTO supplierDTO){
         return supplierService.saveSupplier(supplierDTO);
     }
+
+    @GetMapping(value = "/{id}",produces = "application/json")
+    public ResponseEntity<?> getSupplier(@PathVariable ("id") String id){
+        return ResponseEntity.ok(supplierService.getSupplier(id));
+    }
+
 }

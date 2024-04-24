@@ -8,6 +8,7 @@ import lk.ijse.helloshoesbackend.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +20,13 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public SupplierDTO saveSupplier(SupplierDTO supplierDTO) {
         supplierDTO.setSupplier_code(UUID.randomUUID().toString());
-        return mapping.toSupplierDTO(java.util.Optional.of(supplierDao.save(mapping.toSupplierEntity(supplierDTO))));
+        return mapping.toSupplierDTO((java.util.Optional.of(supplierDao.save(mapping.toSupplierEntity(supplierDTO)))));
     }
+
+    @Override
+    public SupplierDTO getSupplier(String id) {
+        if(!supplierDao.existsById(id));
+        return mapping.toSupplierDTO(supplierDao.findById(id));
+    }
+
 }
