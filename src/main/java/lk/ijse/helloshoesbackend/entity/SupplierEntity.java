@@ -1,16 +1,20 @@
-package lk.ijse.helloshoesbackend.dto;
+package lk.ijse.helloshoesbackend.entity;
 
-import lk.ijse.helloshoesbackend.entity.Category;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class SupplierDTO implements SuperDTO{
+@Entity
+@Table(name = "supplier")
+public class SupplierEntity {
+    @Id
     private String supplier_code;
     private String supplier_name;
+    @Enumerated(EnumType.STRING)
     private Category category;
     private String address_line_01;
     private String address_line_02;
