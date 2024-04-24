@@ -9,4 +9,5 @@ public interface SupplierService {
 
     SupplierDTO getSupplier(String id);
 
+    List<SupplierDTO> getAllSupplier();
 }

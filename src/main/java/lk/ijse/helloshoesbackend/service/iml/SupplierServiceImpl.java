@@ -29,4 +29,8 @@ public class SupplierServiceImpl implements SupplierService {
         return mapping.toSupplierDTO(supplierDao.findById(id));
     }
 
+    @Override
+    public List<SupplierDTO> getAllSupplier() {
+        return mapping.toSupplierDTOList(supplierDao.findAll());
+    }
 }
