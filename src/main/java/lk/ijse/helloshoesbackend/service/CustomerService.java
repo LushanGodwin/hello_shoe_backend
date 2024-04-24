@@ -1,4 +1,13 @@
 package lk.ijse.helloshoesbackend.service;
 
-public interface CustomerService {
+import lk.ijse.helloshoesbackend.dto.CustomerDTO;
+
+import java.util.List;
+
+public interface CustomerService{
+    CustomerDTO saveCustomer(CustomerDTO customerDTO);
+
+    /*CustomerDTO getCustomer(String id);*/
+
+    /*List<CustomerDTO> getAllCustomer();*/
 }
