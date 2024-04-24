@@ -32,4 +32,9 @@ public class Supplier {
     public ResponseEntity<?> getAllSupplier(){
         return ResponseEntity.ok(supplierService.getAllSupplier());
     }
+
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public boolean deleteSupplier(@PathVariable ("id") String id){
+        return supplierService.deleteSupplier(id);
+    }
 }

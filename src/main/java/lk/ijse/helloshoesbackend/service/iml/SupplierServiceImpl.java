@@ -2,6 +2,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.SupplierDTO;
+import lk.ijse.helloshoesbackend.entity.SupplierEntity;
 import lk.ijse.helloshoesbackend.repository.SupplierDao;
 import lk.ijse.helloshoesbackend.service.SupplierService;
 import lk.ijse.helloshoesbackend.util.Mapping;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,5 +34,15 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public List<SupplierDTO> getAllSupplier() {
         return mapping.toSupplierDTOList(supplierDao.findAll());
+    }
+
+    @Override
+    public boolean deleteSupplier(String id) {
+        Optional<SupplierEntity> supplierEntity = supplierDao.findById(id);
+        if (supplierEntity.isPresent()){
+            supplierDao.delete(supplierEntity.get());
+            return true;
+        }
+        return false;
     }
 }
