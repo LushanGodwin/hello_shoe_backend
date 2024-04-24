@@ -30,8 +30,8 @@ public class Customer {
        return ResponseEntity.ok(customerService.getCustomer(id));
     }
 
-    /*@GetMapping(produces = "application/json")
+    @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAllCustomer(){
         return ResponseEntity.ok(customerService.getAllCustomer());
-    }*/
+    }
 }
