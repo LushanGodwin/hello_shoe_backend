@@ -37,4 +37,9 @@ public class Supplier {
     public boolean deleteSupplier(@PathVariable ("id") String id){
         return supplierService.deleteSupplier(id);
     }
+
+    @PatchMapping(value = "/update")
+    public boolean updateSupplier(@RequestBody SupplierDTO supplierDTO){
+        return supplierService.updateSupplier(supplierDTO.getSupplier_code(), supplierDTO);
+    }
 }

@@ -45,4 +45,24 @@ public class SupplierServiceImpl implements SupplierService {
         }
         return false;
     }
+
+    @Override
+    public boolean updateSupplier(String id, SupplierDTO supplierDTO) {
+        Optional<SupplierEntity> supplierEntity = supplierDao.findById(id);
+        if (supplierEntity.isPresent()){
+            supplierEntity.get().setSupplier_name(supplierDTO.getSupplier_name());
+            supplierEntity.get().setCategory(supplierDTO.getCategory());
+            supplierEntity.get().setAddress_line_01(supplierDTO.getAddress_line_01());
+            supplierEntity.get().setAddress_line_02(supplierDTO.getAddress_line_02());
+            supplierEntity.get().setAddress_line_03(supplierDTO.getAddress_line_03());
+            supplierEntity.get().setAddress_line_05(supplierDTO.getAddress_line_04());
+            supplierEntity.get().setAddress_line_04(supplierDTO.getAddress_line_05());
+            supplierEntity.get().setAddress_line_06(supplierDTO.getAddress_line_06());
+            supplierEntity.get().setContact_no_01(supplierDTO.getContact_no_01());
+            supplierEntity.get().setContact_no_02(supplierDTO.getContact_no_02());
+
+            return true;
+        }
+        return false;
+    }
 }

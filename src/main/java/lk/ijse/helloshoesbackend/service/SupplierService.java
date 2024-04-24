@@ -12,4 +12,7 @@ public interface SupplierService {
     List<SupplierDTO> getAllSupplier();
 
     boolean deleteSupplier(String id);
+
+    boolean updateSupplier(String id, SupplierDTO supplierDTO);
+
 }
