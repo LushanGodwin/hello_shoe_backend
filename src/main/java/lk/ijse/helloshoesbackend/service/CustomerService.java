@@ -12,4 +12,6 @@ public interface CustomerService{
     List<CustomerDTO> getAllCustomer();
 
     boolean deleteCustomer(String id);
+
+    boolean updateCustomer(String id, CustomerDTO customerDTO);
 }

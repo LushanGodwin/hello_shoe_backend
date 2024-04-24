@@ -49,5 +49,29 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    public boolean updateCustomer(String id, CustomerDTO customerDTO) {
+        Optional<CustomerEntity> customer = customerDao.findById(id);
+        if (customer.isPresent()){
+            customer.get().setCustomer_name(customerDTO.getCustomer_name());
+            customer.get().setGender(customerDTO.getGender());
+            customer.get().setJoinDate(customerDTO.getJoinDate());
+            customer.get().setLevel(customerDTO.getLevel());
+            customer.get().setTotalPoints(customerDTO.getTotalPoints());
+            customer.get().setDob(customerDTO.getDob());
+            customer.get().setAddress_line_01(customerDTO.getAddress_line_01());
+            customer.get().setAddress_line_02(customerDTO.getAddress_line_02());
+            customer.get().setAddress_line_03(customerDTO.getAddress_line_03());
+            customer.get().setAddress_line_04(customerDTO.getAddress_line_04());
+            customer.get().setAddress_line_05(customerDTO.getAddress_line_05());
+            customer.get().setContact(customerDTO.getContact());
+            customer.get().setEmail(customerDTO.getEmail());
+            customer.get().setPurchase_time_date(customerDTO.getPurchase_time_date());
+
+            return true;
+        }
+        return false;
+    }
+
 
 }

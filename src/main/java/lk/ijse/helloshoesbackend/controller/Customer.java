@@ -40,4 +40,9 @@ public class Customer {
     public boolean deleteCustomer(@PathVariable("id") String id){
         return customerService.deleteCustomer(id);
     }
+
+    @PatchMapping("/update")
+    public boolean updateCustomer(@RequestBody CustomerDTO customerDTO){
+        return customerService.updateCustomer(customerDTO.getCustomer_code(),customerDTO);
+    }
 }
