@@ -1,9 +1,12 @@
 package lk.ijse.helloshoesbackend.entity;
 
 import jakarta.persistence.*;
+import lk.ijse.helloshoesbackend.Enum.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +28,6 @@ public class SupplierEntity {
     private String contact_no_01;
     private String contact_no_02;
     private String email;
+    @OneToMany(mappedBy = "supplierEntity",cascade = CascadeType.ALL)
+    private List<StockEntity> stockEntities;
 }
