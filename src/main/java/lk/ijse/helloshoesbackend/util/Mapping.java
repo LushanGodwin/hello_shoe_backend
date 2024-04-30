@@ -28,6 +28,10 @@ public class Mapping {
         return modelMapper.map(customerEntities, List.class);
     }
 
+    public List<CustomerEntity> toCustomerEntityList(List<CustomerDTO> customerDTOS){
+        return modelMapper.map(customerDTOS, List.class);
+    }
+
     public SupplierDTO toSupplierDTO(Optional<SupplierEntity> supplierEntity){
         return modelMapper.map(supplierEntity, SupplierDTO.class);
     }
