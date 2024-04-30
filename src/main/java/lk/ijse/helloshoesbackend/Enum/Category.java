@@ -1,4 +1,4 @@
-package lk.ijse.helloshoesbackend.entity;
+package lk.ijse.helloshoesbackend.Enum;
 
 public enum Category {
     INTERNATIONAL,LOCAL
