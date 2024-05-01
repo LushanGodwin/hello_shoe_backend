@@ -1,4 +1,4 @@
-package lk.ijse.helloshoesbackend.dto;
+package lk.ijse.helloshoesbackend.secureAndResponse.secure;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -10,13 +10,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserDTO implements SuperDTO{
-    @Null(message = "Generate by program.")
+public class SignUp {
+
+    @Null(message = "Id generate by program")
     private String id;
-    @NotNull(message = "Email cannot be null")
+
+    @NotNull(message = "Email Cannot be null")
     @Email
     private String email;
 
