@@ -21,7 +21,7 @@ public class Customer {
         return "Hello I'm Customer Controller. I'm OK! Have a nice day!";
     }
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO){
         return customerService.saveCustomer(customerDTO);
     }

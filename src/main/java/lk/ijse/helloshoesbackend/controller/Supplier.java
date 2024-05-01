@@ -30,6 +30,7 @@ public class Supplier {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAllSupplier(){
+
         return ResponseEntity.ok(supplierService.getAllSupplier());
     }
 

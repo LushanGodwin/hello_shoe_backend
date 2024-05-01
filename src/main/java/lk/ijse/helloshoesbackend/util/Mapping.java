@@ -2,8 +2,10 @@ package lk.ijse.helloshoesbackend.util;
 
 import lk.ijse.helloshoesbackend.dto.CustomerDTO;
 import lk.ijse.helloshoesbackend.dto.SupplierDTO;
+import lk.ijse.helloshoesbackend.dto.UserDTO;
 import lk.ijse.helloshoesbackend.entity.CustomerEntity;
 import lk.ijse.helloshoesbackend.entity.SupplierEntity;
+import lk.ijse.helloshoesbackend.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -42,5 +44,13 @@ public class Mapping {
 
     public List<SupplierDTO> toSupplierDTOList(List<SupplierEntity> supplierEntities){
         return modelMapper.map(supplierEntities, List.class);
+    }
+
+    public UserEntity toUserEntity(UserDTO userDTO){
+        return modelMapper.map(userDTO, UserEntity.class);
+    }
+
+    public UserDTO toUserDTO(UserEntity userEntity){
+        return modelMapper.map(userEntity, UserDTO.class);
     }
 }
