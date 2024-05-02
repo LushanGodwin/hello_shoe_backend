@@ -1,9 +1,11 @@
 package lk.ijse.helloshoesbackend.util;
 
 import lk.ijse.helloshoesbackend.dto.CustomerDTO;
+import lk.ijse.helloshoesbackend.dto.EmployeeDTO;
 import lk.ijse.helloshoesbackend.dto.SupplierDTO;
 import lk.ijse.helloshoesbackend.dto.UserDTO;
 import lk.ijse.helloshoesbackend.entity.CustomerEntity;
+import lk.ijse.helloshoesbackend.entity.EmployeeEntity;
 import lk.ijse.helloshoesbackend.entity.SupplierEntity;
 import lk.ijse.helloshoesbackend.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +54,17 @@ public class Mapping {
 
     public UserDTO toUserDTO(UserEntity userEntity){
         return modelMapper.map(userEntity, UserDTO.class);
+    }
+
+    public EmployeeEntity toEmployeeEntity(EmployeeDTO employeeDTO){
+        return modelMapper.map(employeeDTO, EmployeeEntity.class);
+    }
+
+    public EmployeeDTO toEmployeeDTO(Optional<EmployeeEntity> employeeEntity){
+        return modelMapper.map(employeeEntity, EmployeeDTO.class);
+    }
+
+    public List<EmployeeDTO> toEmployeeDTOList(List<EmployeeEntity> employeeEntities) {
+        return modelMapper.map(employeeEntities,List.class);
     }
 }

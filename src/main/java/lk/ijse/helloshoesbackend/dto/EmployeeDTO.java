@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class EmployeeDTO implements SuperDTO{
 
     @Null(message = "Employee code generate by the program")
-    private String employee_code;
+    private String employeeCode;
 
     @NotBlank(message = "Employee name cannot be blank")
     private String employee_name;

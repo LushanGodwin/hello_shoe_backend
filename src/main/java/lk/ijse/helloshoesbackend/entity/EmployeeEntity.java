@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "employee")
 public class EmployeeEntity {
     @Id
-    private String employee_code;
+    private String employeeCode;
     private String employee_name;
     @Column(columnDefinition = "LONGTEXT")
     private String profile_picture;
@@ -32,7 +32,7 @@ public class EmployeeEntity {
     private String address_line_02;
     private String address_line_03;
     private String address_line_04;
-    private String address_line_05;
+    private String postalCode;
     private String contact_no;
     private String email;
     private String name_of_the_guardian;
