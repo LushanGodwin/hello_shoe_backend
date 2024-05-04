@@ -1,13 +1,7 @@
 package lk.ijse.helloshoesbackend.util;
 
-import lk.ijse.helloshoesbackend.dto.CustomerDTO;
-import lk.ijse.helloshoesbackend.dto.EmployeeDTO;
-import lk.ijse.helloshoesbackend.dto.SupplierDTO;
-import lk.ijse.helloshoesbackend.dto.UserDTO;
-import lk.ijse.helloshoesbackend.entity.CustomerEntity;
-import lk.ijse.helloshoesbackend.entity.EmployeeEntity;
-import lk.ijse.helloshoesbackend.entity.SupplierEntity;
-import lk.ijse.helloshoesbackend.entity.UserEntity;
+import lk.ijse.helloshoesbackend.dto.*;
+import lk.ijse.helloshoesbackend.entity.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -66,5 +60,21 @@ public class Mapping {
 
     public List<EmployeeDTO> toEmployeeDTOList(List<EmployeeEntity> employeeEntities) {
         return modelMapper.map(employeeEntities,List.class);
+    }
+
+    public List<EmployeeEntity> toEmployeeEntityList(List<EmployeeDTO> employeeDTOS){
+        return modelMapper.map(employeeDTOS, List.class);
+    }
+
+    public GenderDTO toGenderDTO(GenderEntity genderEntity){
+        return modelMapper.map(genderEntity, GenderDTO.class);
+    }
+
+    public GenderEntity toGenderEntity(GenderDTO genderDTO){
+        return modelMapper.map(genderDTO, GenderEntity.class);
+    }
+
+    public List<GenderDTO> toGenderDTOList(List<GenderEntity> genderEntities){
+        return modelMapper.map(genderEntities, List.class);
     }
 }
