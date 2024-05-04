@@ -89,4 +89,16 @@ public class Mapping {
     public List<OccasionDTO> toOccasionDTOList(List<OccasionEntity> occasionEntities){
         return modelMapper.map(occasionEntities, List.class);
     }
+
+    public VarietyDTO toVarietyDTO(VarietyEntity varietyEntity){
+        return modelMapper.map(varietyEntity, VarietyDTO.class);
+    }
+
+    public VarietyEntity toVarietyEntity(VarietyDTO varietyDTO){
+        return modelMapper.map(varietyDTO, VarietyEntity.class);
+    }
+
+    public List<VarietyDTO> toVarietyDTOList(List<VarietyEntity> varietyEntities){
+        return modelMapper.map(varietyEntities, List.class);
+    }
 }
