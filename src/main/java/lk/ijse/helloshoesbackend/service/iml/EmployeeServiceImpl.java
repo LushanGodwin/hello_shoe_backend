@@ -82,6 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeEntity1.setEmail(employeeDTO.getEmail());
         employeeEntity1.setName_of_the_guardian(employeeDTO.getName_of_the_guardian());
         employeeEntity1.setEmergency_contact_no(employeeDTO.getEmergency_contact_no());
+        employeeDao.save(mapping.toEmployeeEntity(employeeDTO));
     }
 
     @Override

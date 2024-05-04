@@ -3,6 +3,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.CustomerDTO;
 import lk.ijse.helloshoesbackend.entity.CustomerEntity;
+import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.repository.CustomerDao;
 import lk.ijse.helloshoesbackend.service.CustomerService;
 import lk.ijse.helloshoesbackend.util.Mapping;
@@ -67,7 +68,8 @@ public class CustomerServiceImpl implements CustomerService {
             customer.get().setContact(customerDTO.getContact());
             customer.get().setEmail(customerDTO.getEmail());
             customer.get().setPurchase_time_date(customerDTO.getPurchase_time_date());
-
+            if (customerDao.existsById(id)) throw new NotFoundException("Customer not fond");
+            customerDao.save(mapping.toCustomerEntity(customerDTO));
             return true;
         }
         return false;

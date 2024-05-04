@@ -3,6 +3,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.SupplierDTO;
 import lk.ijse.helloshoesbackend.entity.SupplierEntity;
+import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.repository.SupplierDao;
 import lk.ijse.helloshoesbackend.service.SupplierService;
 import lk.ijse.helloshoesbackend.util.Mapping;
@@ -60,7 +61,8 @@ public class SupplierServiceImpl implements SupplierService {
             supplierEntity.get().setAddress_line_06(supplierDTO.getAddress_line_06());
             supplierEntity.get().setContact_no_01(supplierDTO.getContact_no_01());
             supplierEntity.get().setContact_no_02(supplierDTO.getContact_no_02());
-
+            if (supplierDao.existsById(id)) throw new NotFoundException("Supplier not found");
+            supplierDao.save(mapping.toSupplierEntity(supplierDTO));
             return true;
         }
         return false;
