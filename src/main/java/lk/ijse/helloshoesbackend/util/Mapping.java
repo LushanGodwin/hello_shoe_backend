@@ -77,4 +77,16 @@ public class Mapping {
     public List<GenderDTO> toGenderDTOList(List<GenderEntity> genderEntities){
         return modelMapper.map(genderEntities, List.class);
     }
+
+    public OccasionDTO toOccasionDTO(OccasionEntity occasionEntity){
+        return modelMapper.map(occasionEntity, OccasionDTO.class);
+    }
+
+    public OccasionEntity toOccasionEntity(OccasionDTO occasionDTO){
+        return modelMapper.map(occasionDTO, OccasionEntity.class);
+    }
+
+    public List<OccasionDTO> toOccasionDTOList(List<OccasionEntity> occasionEntities){
+        return modelMapper.map(occasionEntities, List.class);
+    }
 }
