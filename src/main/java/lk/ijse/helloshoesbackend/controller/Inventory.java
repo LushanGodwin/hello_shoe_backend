@@ -1,12 +1,15 @@
 package lk.ijse.helloshoesbackend.controller;
 
 import lk.ijse.helloshoesbackend.dto.GenderDTO;
+import lk.ijse.helloshoesbackend.dto.ItemDTO;
 import lk.ijse.helloshoesbackend.dto.OccasionDTO;
 import lk.ijse.helloshoesbackend.dto.VarietyDTO;
 import lk.ijse.helloshoesbackend.service.GenderService;
+import lk.ijse.helloshoesbackend.service.InventoryService;
 import lk.ijse.helloshoesbackend.service.OccasionService;
 import lk.ijse.helloshoesbackend.service.VarietyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class Inventory {
     private final GenderService genderService;
+
     private final OccasionService occasionService;
+
     private final VarietyService varietyService;
+
+    private final InventoryService inventoryService;
 
     @GetMapping("/health")
     public String healthCheck(){
@@ -33,13 +40,13 @@ public class Inventory {
         return ResponseEntity.ok(genderService.getAllGender());
     }
 
-    @PatchMapping(value = "/{id}")
-    public void updateGender(@PathVariable ("id") String id,@RequestBody GenderDTO genderDTO){
+    @PatchMapping(value = "/{genderId}")
+    public void updateGender(@PathVariable ("genderId") String id,@RequestBody GenderDTO genderDTO){
         genderService.updateGender(id,genderDTO);
     }
 
-    @DeleteMapping(value = "/{id}",produces = "application/json")
-    public boolean deleteGender(@PathVariable ("id") String id){
+    @DeleteMapping(value = "/{genderId}",produces = "application/json")
+    public boolean deleteGender(@PathVariable ("genderId") String id){
         return genderService.deleteGender(id);
     }
 
@@ -53,16 +60,17 @@ public class Inventory {
         return ResponseEntity.ok(occasionService.getAllOccasion());
     }
 
-    @PatchMapping(value = "/{id}")
-    public void updateOccasion(@PathVariable ("id") String id,@RequestBody OccasionDTO occasionDTO){
+    @PatchMapping(value = "/{occasionId}")
+    public void updateOccasion(@PathVariable ("occasionId") String id,@RequestBody OccasionDTO occasionDTO){
         occasionService.updateOccasion(id,occasionDTO);
     }
 
-    @DeleteMapping(value = "/{id}",produces = "application/json")
-    public boolean deleteOccasion(@PathVariable ("id") String id){
+    @DeleteMapping(value = "/{occasionId}",produces = "application/json")
+    public boolean deleteOccasion(@PathVariable ("occasionId") String id){
         return occasionService.deleteOccasion(id);
     }
 
+    @PostMapping(value = "/saveVariety",produces = "application/json")
     public void saveVariety(@RequestBody VarietyDTO varietyDTO){
         varietyService.saveVariety(varietyDTO);
     }
@@ -72,13 +80,38 @@ public class Inventory {
         return ResponseEntity.ok(varietyService.getAllVariety());
     }
 
-    @PatchMapping(value = "/{id}")
-    public void updateVariety(@PathVariable ("id") String id,@RequestBody VarietyDTO varietyDTO){
+    @PatchMapping(value = "/{varietyId}")
+    public void updateVariety(@PathVariable ("varietyId") String id,@RequestBody VarietyDTO varietyDTO){
         varietyService.updateVariety(id,varietyDTO);
     }
 
-    @DeleteMapping(value = "/{id}",produces = "application/json")
-    public boolean deleteVariety(@PathVariable ("id") String id){
+    @DeleteMapping(value = "/{varietyId}",produces = "application/json")
+    public boolean deleteVariety(@PathVariable ("varietyId") String id){
         return varietyService.deleteVariety(id);
+    }
+
+    @PostMapping(produces = "application/json")
+    public void saveItem(@RequestBody ItemDTO itemDTO){
+        inventoryService.saveInventory(itemDTO);
+    }
+
+    @GetMapping(value = "/{getItem}")
+    public ResponseEntity<?> getItem(@PathVariable ("getItem") String id){
+        return ResponseEntity.ok(inventoryService.getItem(id));
+    }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<?> getAllItem(){
+        return ResponseEntity.ok(inventoryService.getAllItem());
+    }
+
+    @PatchMapping(value = "/{updateItem}")
+    public void updateItem(@PathVariable ("updateItem") String id, @RequestBody ItemDTO itemDTO){
+        inventoryService.updateItem(id,itemDTO);
+    }
+
+    @PatchMapping("/{deleteItem}")
+    public void deleteItem(@PathVariable ("deleteItem") String id){
+        inventoryService.deleteItem(id);
     }
 }

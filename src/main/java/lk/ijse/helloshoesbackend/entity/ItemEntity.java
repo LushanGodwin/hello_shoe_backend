@@ -2,11 +2,17 @@ package lk.ijse.helloshoesbackend.entity;
 
 import jakarta.persistence.*;
 import lk.ijse.helloshoesbackend.Enum.Status;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "item")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemEntity {
     @Id
     private String item_code;
