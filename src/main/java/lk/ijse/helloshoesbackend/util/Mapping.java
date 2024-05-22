@@ -112,4 +112,10 @@ public class Mapping {
     public List<ItemDTO> toItemDTOList(List<ItemEntity> itemEntities){
         return modelMapper.map(itemEntities, List.class);
     }
+
+    public BranchEntity toBranchEntity(BranchDTO branchDTO) {
+        return modelMapper.map(branchDTO, BranchEntity.class);
+    }
+
+
 }
