@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class SupplierDTO implements SuperDTO{
 
     @Null(message = "Supplier Code generate by the program")
-    private String supplier_code;
+    private String supplierCode;
 
     @NotBlank(message = "Supplier Name cannot be Blank")
     private String supplier_name;

@@ -13,6 +13,7 @@ public interface SupplierService {
 
     boolean deleteSupplier(String id);
 
-    boolean updateSupplier(String id, SupplierDTO supplierDTO);
+    void updateSupplier(String id, SupplierDTO supplierDTO);
 
+    String getSupplierId();
 }

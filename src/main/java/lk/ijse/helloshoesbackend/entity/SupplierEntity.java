@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "supplier")
 public class SupplierEntity {
     @Id
-    private String supplier_code;
+    private String supplierCode;
     private String supplier_name;
     @Enumerated(EnumType.STRING)
     private Category category;

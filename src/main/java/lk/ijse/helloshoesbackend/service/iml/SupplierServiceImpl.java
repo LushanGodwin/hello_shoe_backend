@@ -2,6 +2,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.SupplierDTO;
+import lk.ijse.helloshoesbackend.entity.CustomerEntity;
 import lk.ijse.helloshoesbackend.entity.SupplierEntity;
 import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.repository.SupplierDao;
@@ -22,7 +23,7 @@ public class SupplierServiceImpl implements SupplierService {
     private final Mapping mapping;
     @Override
     public SupplierDTO saveSupplier(SupplierDTO supplierDTO) {
-        supplierDTO.setSupplier_code(UUID.randomUUID().toString());
+        supplierDTO.setSupplierCode(getNextSupplierId());
         return mapping.toSupplierDTO((java.util.Optional.of(supplierDao.save(mapping.toSupplierEntity(supplierDTO)))));
     }
 
@@ -48,9 +49,10 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public boolean updateSupplier(String id, SupplierDTO supplierDTO) {
+    public void updateSupplier(String id, SupplierDTO supplierDTO) {
+        /*System.out.println("------------------------------------------"+ id);*/
         Optional<SupplierEntity> supplierEntity = supplierDao.findById(id);
-        if (supplierEntity.isPresent()){
+        if (supplierEntity.isPresent()) {
             supplierEntity.get().setSupplier_name(supplierDTO.getSupplier_name());
             supplierEntity.get().setCategory(supplierDTO.getCategory());
             supplierEntity.get().setAddress_line_01(supplierDTO.getAddress_line_01());
@@ -61,10 +63,20 @@ public class SupplierServiceImpl implements SupplierService {
             supplierEntity.get().setAddress_line_06(supplierDTO.getAddress_line_06());
             supplierEntity.get().setContact_no_01(supplierDTO.getContact_no_01());
             supplierEntity.get().setContact_no_02(supplierDTO.getContact_no_02());
-            if (supplierDao.existsById(id)) throw new NotFoundException("Supplier not found");
-            supplierDao.save(mapping.toSupplierEntity(supplierDTO));
-            return true;
+        }else{
+            throw new NotFoundException("Supplier not found");
         }
-        return false;
+    }
+
+    @Override
+    public String getSupplierId() {
+        return getNextSupplierId();
+    }
+
+    private String getNextSupplierId() {
+        SupplierEntity firstByOrderBySupplierCodeDesc = supplierDao.findFirstByOrderBySupplierCodeDesc();
+        return (firstByOrderBySupplierCodeDesc != null)
+                ? String.format("Sup-%03d", Integer.parseInt(firstByOrderBySupplierCodeDesc.getSupplierCode().replace("Sup-", "")) + 1)
+                : "Sup-001";
     }
 }
