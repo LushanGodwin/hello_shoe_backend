@@ -13,5 +13,8 @@ public interface CustomerService{
 
     boolean deleteCustomer(String id);
 
-    boolean updateCustomer(String id, CustomerDTO customerDTO);
+
+    String getCustomerId();
+
+    void updateCustomer(String id, CustomerDTO customerDTO);
 }

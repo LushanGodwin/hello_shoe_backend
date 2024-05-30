@@ -16,7 +16,7 @@ import java.util.Date;
 public class CustomerDTO implements SuperDTO{
 
     @Null(message = "Customer Code generate by the program")
-    private String customer_code;
+    private String customerCode;
 
     @NotBlank(message = "Customer Name cannot be Blank")
     private String customer_name;
@@ -49,8 +49,8 @@ public class CustomerDTO implements SuperDTO{
     @NotBlank(message = "Address line 04 cannot be blank")
     private String address_line_04;
 
-    @NotBlank(message = "Address line 05 cannot be blank")
-    private String address_line_05;
+    @NotBlank(message = "PostalCode cannot be blank")
+    private String postalCode;
 
     @NotBlank(message = "Contact No cannot be blank")
     @Pattern(regexp = "^\\+?[0-9\\-\\s]+$", message = "Invalid contact number format")

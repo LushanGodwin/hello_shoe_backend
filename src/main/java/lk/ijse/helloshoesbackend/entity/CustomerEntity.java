@@ -19,7 +19,7 @@ import java.util.List;
 public class CustomerEntity {
 
     @Id
-    private String customer_code;
+    private String customerCode;
 
     private String customer_name;
 
@@ -45,7 +45,7 @@ public class CustomerEntity {
 
     private String address_line_04;
 
-    private String address_line_05;
+    private String postalCode;
 
     private String contact;
 
