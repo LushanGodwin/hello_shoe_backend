@@ -25,10 +25,10 @@ public class CustomerDTO implements SuperDTO{
     private Gender gender;
 
     @PastOrPresent(message = "Join Date must be Present or Past")
-    @NotNull(message = "Join date cannot be null")
+    @Null(message = "Join date cannot be null")
     private Date joinDate;
 
-    @NotNull(message = "Level cannot be null")
+    @Null(message = "Level cannot be null")
     private Level level;
 
     @PositiveOrZero(message = "Total Points must be Positive or Zero")
@@ -60,6 +60,6 @@ public class CustomerDTO implements SuperDTO{
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
-    @NotNull(message = "Purchased date cannot be null")
+    @Null(message = "Purchased date cannot be null")
     private Timestamp purchase_time_date;
 }
