@@ -11,5 +11,5 @@ public interface OccasionService {
 
     void updateOccasion(String id, OccasionDTO occasionDTO);
 
-    boolean deleteOccasion(String id);
+    void deleteOccasion(String id);
 }

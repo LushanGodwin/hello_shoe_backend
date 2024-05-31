@@ -2,6 +2,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.OccasionDTO;
+import lk.ijse.helloshoesbackend.exception.DuplicateException;
 import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.repository.OccasionDao;
 import lk.ijse.helloshoesbackend.service.OccasionService;
@@ -19,6 +20,7 @@ public class OccasionServiceImpl implements OccasionService {
     private final OccasionDao occasionDao;
     @Override
     public void saveOccasion(OccasionDTO occasionDTO) {
+        if (occasionDao.existsById(occasionDTO.getOccasionCode())) throw new DuplicateException("Occasion ID Duplicate");
         occasionDao.save(mapping.toOccasionEntity(occasionDTO));
     }
 
@@ -34,8 +36,9 @@ public class OccasionServiceImpl implements OccasionService {
     }
 
     @Override
-    public boolean deleteOccasion(String id) {
+    public void deleteOccasion(String id) {
+        if (!occasionDao.existsById(id)) throw new NotFoundException("Occasion not found");
         occasionDao.deleteById(id);
-        return true;
+
     }
 }

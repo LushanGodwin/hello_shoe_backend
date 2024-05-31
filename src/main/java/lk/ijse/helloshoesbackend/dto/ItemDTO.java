@@ -46,7 +46,7 @@ public class ItemDTO implements SuperDTO{
     @PositiveOrZero(message = "profit Margin cannot be negative.")
     private Double profitMargin;
 
-    private String gender_code;
+    private String genderCode;
     private String occasionCode;
     private String varietyCode;
 }

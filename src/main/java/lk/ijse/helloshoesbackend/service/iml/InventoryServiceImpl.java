@@ -53,8 +53,8 @@ public class InventoryServiceImpl implements InventoryService {
 
     private String generateItemCode(ItemDTO itemDTO) {
         StringBuilder prefixBuilder = new StringBuilder();
-        if (itemDTO.getGender_code() != null) {
-            prefixBuilder.append(itemDTO.getGender_code());
+        if (itemDTO.getGenderCode() != null) {
+            prefixBuilder.append(itemDTO.getGenderCode());
         }
         if (itemDTO.getOccasionCode() != null) {
             prefixBuilder.append(itemDTO.getOccasionCode());

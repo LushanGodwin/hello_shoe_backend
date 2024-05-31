@@ -12,5 +12,5 @@ public interface GenderService {
 
     void updateGender(String id, GenderDTO genderDTO);
 
-    boolean deleteGender(String id);
+    void deleteGender(String id);
 }

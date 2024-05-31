@@ -2,6 +2,7 @@ package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.VarietyDTO;
+import lk.ijse.helloshoesbackend.exception.DuplicateException;
 import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.repository.VarietyDao;
 import lk.ijse.helloshoesbackend.service.VarietyService;
@@ -20,6 +21,7 @@ public class VarietyServiceImpl implements VarietyService {
 
     @Override
     public void saveVariety(VarietyDTO varietyDTO) {
+        if (varietyDao.existsById(varietyDTO.getVarietyCode())) throw new DuplicateException("Duplicate Variety ID");
         varietyDao.save(mapping.toVarietyEntity(varietyDTO));
     }
 
@@ -35,8 +37,8 @@ public class VarietyServiceImpl implements VarietyService {
     }
 
     @Override
-    public boolean deleteVariety(String id) {
+    public void deleteVariety(String id) {
+        if (!varietyDao.existsById(id)) throw new NotFoundException("Variety not found");
         varietyDao.deleteById(id);
-        return true;
     }
 }

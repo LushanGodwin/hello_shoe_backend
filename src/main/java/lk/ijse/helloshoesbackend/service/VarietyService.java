@@ -11,5 +11,5 @@ public interface VarietyService {
 
     void updateVariety(String id, VarietyDTO varietyDTO);
 
-    boolean deleteVariety(String id);
+    void deleteVariety(String id);
 }

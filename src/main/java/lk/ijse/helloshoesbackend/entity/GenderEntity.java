@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class GenderEntity {
     @Id
-    private String gender_code;
+    private String genderCode;
     private String gender_desc;
     @OneToMany(mappedBy = "genderEntity",cascade = CascadeType.ALL)
     private List<ItemEntity> itemEntities;
