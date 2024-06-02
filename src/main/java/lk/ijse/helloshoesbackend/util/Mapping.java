@@ -124,4 +124,8 @@ public class Mapping {
     public List<SizeDTO> toSizeDTOList(List<SizeEntity> sizeEntities) {
         return modelMapper.map(sizeEntities, List.class);
     }
+
+    public List<BranchDTO> toBranchDTOs(List<BranchEntity> all) {
+        return modelMapper.map(all, List.class);
+    }
 }

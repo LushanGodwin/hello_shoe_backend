@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InventoryDao extends JpaRepository<ItemEntity,String > {
-    @Query("SELECT item_code FROM ItemEntity  WHERE item_code LIKE CONCAT(:prefix, '%') ORDER BY item_code DESC")
-    String findLastItemCodeStartingWithPrefix(@Param("prefix") String prefix);
-}
+    @Query("SELECT itemCode FROM ItemEntity  WHERE itemCode LIKE CONCAT(:prefix, '%') ORDER BY itemCode DESC")
+    String findLastItemCodeStartingWithPrefix(@Param("prefix") String prefix);}

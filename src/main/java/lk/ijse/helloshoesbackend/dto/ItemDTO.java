@@ -14,12 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemDTO implements SuperDTO{
     @Null(message = "Item code generate by the program")
-    private String item_code;
+    private String itemCode;
     @NotBlank(message = "Item Description cannot be blank")
-    private String item_desc;
+    private String itemDesc;
     @NotNull(message = "Propic cannot be null")
     private String pic;
-    @NotNull(message = "Status cannot be null")
+    /*@NotNull(message = "Status cannot be null")
     private ItemStatus status;
     @NotNull(message = "Category cannot be null")
     private String category;
@@ -44,7 +44,7 @@ public class ItemDTO implements SuperDTO{
 
     @NotNull(message = "Profit Margin cannot be null.")
     @PositiveOrZero(message = "profit Margin cannot be negative.")
-    private Double profitMargin;
+    private Double profitMargin;*/
 
     private String genderCode;
     private String occasionCode;

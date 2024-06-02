@@ -5,13 +5,14 @@ import lk.ijse.helloshoesbackend.dto.ItemDTO;
 import java.util.List;
 
 public interface InventoryService {
-    void saveInventory(ItemDTO itemDTO);
 
     ItemDTO getItem(String id);
 
-    List<ItemDTO> getAllItem();
+    List<ItemDTO> getAllItems();
 
-    void updateItem(String id, ItemDTO itemDTO);
+    void updateItem(String id, String itemDesc, String pic);
 
     void deleteItem(String id);
+
+    void saveItem(ItemDTO itemDTO);
 }

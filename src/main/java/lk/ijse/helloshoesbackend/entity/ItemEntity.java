@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ItemEntity {
     @Id
-    private String item_code;
-    private String item_desc;
+    private String itemCode;
+    private String itemDesc;
     private String pic;
     private String status;
     @ManyToOne

@@ -1,19 +1,25 @@
 package lk.ijse.helloshoesbackend.controller;
 
+import jakarta.validation.Valid;
 import lk.ijse.helloshoesbackend.dto.*;
 import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.service.*;
+import lk.ijse.helloshoesbackend.util.UtilMatters;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/v1/inventory")
-@RequiredArgsConstructor
+@AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:63342")
 public class Inventory {
     private final GenderService genderService;
@@ -221,30 +227,99 @@ public class Inventory {
         }
     }
 
-    @PostMapping(produces = "application/json")
-    public void saveItem(@RequestBody ItemDTO itemDTO){
-        inventoryService.saveInventory(itemDTO);
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> saveItem(@Valid
+                                      @RequestPart ("itemDesc") String itemDesc,
+                                      @RequestPart ("pic") String pic,
+                                      @RequestParam(value = "genderCode", required = false, defaultValue = "-1") String genderCode,
+                                      @RequestParam(value = "occasionCode", required = false, defaultValue = "-1") String occasionCode,
+                                      @RequestParam(value = "varietyCode", required = false, defaultValue = "-1") String varietyCode,
+                                      Errors errors){
+        if (errors.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setItemDesc(itemDesc);
+        itemDTO.setPic(UtilMatters.convertToBase64(pic));
+        itemDTO.setGenderCode(genderCode);
+        itemDTO.setOccasionCode(occasionCode);
+        itemDTO.setVarietyCode(varietyCode);
+
+        try {
+            inventoryService.saveItem(itemDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Item Details saved Successfully.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Item saved Unsuccessfully.\nMore Details\n"+exception);
+        }
+
     }
 
-    @GetMapping(value = "/{getItem}")
-    public ResponseEntity<?> getItem(@PathVariable ("getItem") String id){
-        return ResponseEntity.ok(inventoryService.getItem(id));
+    @GetMapping(value = "/{id}",produces = "application/json")
+    public ResponseEntity<?> getItem(@PathVariable ("id") String id){
+        try {
+            return ResponseEntity.ok(inventoryService.getItem(id));
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Item Details fetched Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 
-    @GetMapping(produces = "application/json")
-    public ResponseEntity<?> getAllItem(){
-        return ResponseEntity.ok(inventoryService.getAllItem());
+
+    @GetMapping("/getAllItems")
+    public ResponseEntity<?> getAllItems(){
+        try {
+            return ResponseEntity.ok(inventoryService.getAllItems());
+        }catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Item Details fetched Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 
-    @PatchMapping(value = "/{updateItem}")
-    public void updateItem(@PathVariable ("updateItem") String id, @RequestBody ItemDTO itemDTO){
-        inventoryService.updateItem(id,itemDTO);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateItem(@Valid
+                                             @RequestPart ("itemDesc") String itemDesc,
+                                             @RequestPart ("pic") String pic,
+                                             @PathVariable ("id") String id,
+                                             Errors errors) {
+
+        if (errors.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    errors.getFieldErrors().get(0).getDefaultMessage());
+        }
+
+        try {
+            pic = UtilMatters.convertToBase64(pic);
+            inventoryService.updateItem(itemDesc,pic,id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Item Details Updated Successfully.");
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Item Details Updated Unsuccessfully.\nMore Reason\n"+exception);
+        }
+
+    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable ("id") String id){
+        try {
+            inventoryService.deleteItem(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Item Details deleted Successfully.");
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Item Details deleted Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 
-    @PatchMapping("/{deleteItem}")
-    public void deleteItem(@PathVariable ("deleteItem") String id){
-        inventoryService.deleteItem(id);
-    }
 
     @GetMapping("/nextSizeId")
     public ResponseEntity<?> getSizeId(){
