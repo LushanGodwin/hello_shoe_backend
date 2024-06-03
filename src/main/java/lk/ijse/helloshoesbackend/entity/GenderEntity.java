@@ -16,6 +16,6 @@ public class GenderEntity {
     @Id
     private String genderCode;
     private String gender_desc;
-    @OneToMany(mappedBy = "genderEntity",cascade = CascadeType.ALL)
-    private List<ItemEntity> itemEntities;
+    /*@OneToMany(mappedBy = "genderEntity",cascade = CascadeType.ALL)
+    private List<ItemEntity> itemEntities;*/
 }

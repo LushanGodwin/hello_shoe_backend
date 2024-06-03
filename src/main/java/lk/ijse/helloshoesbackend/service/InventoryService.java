@@ -10,7 +10,7 @@ public interface InventoryService {
 
     List<ItemDTO> getAllItems();
 
-    void updateItem(String id, String itemDesc, String pic);
+    void updateItem(String itemDesc, String pic,String id);
 
     void deleteItem(String id);
 

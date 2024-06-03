@@ -243,7 +243,7 @@ public class Inventory {
 
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setItemDesc(itemDesc);
-        itemDTO.setPic(UtilMatters.convertToBase64(pic));
+        itemDTO.setPic(pic);
         itemDTO.setGenderCode(genderCode);
         itemDTO.setOccasionCode(occasionCode);
         itemDTO.setVarietyCode(varietyCode);
@@ -295,7 +295,6 @@ public class Inventory {
         }
 
         try {
-            pic = UtilMatters.convertToBase64(pic);
             inventoryService.updateItem(itemDesc,pic,id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Item Details Updated Successfully.");
         } catch (NotFoundException exception) {

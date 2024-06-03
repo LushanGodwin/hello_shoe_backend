@@ -67,8 +67,10 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void updateItem(String id, String itemDesc, String pic) {
+    public void updateItem(String itemDesc, String pic, String id) {
+        System.out.println(id);
         Optional<ItemEntity> itemEntityOptional = inventoryDao.findById(id);
+        System.out.println(itemEntityOptional);
         if (itemEntityOptional.isEmpty()) {
             throw new NotFoundException("Item not found.");
         }
