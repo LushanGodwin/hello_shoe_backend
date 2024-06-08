@@ -3,8 +3,6 @@ package lk.ijse.helloshoesbackend.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
-import jakarta.validation.constraints.PositiveOrZero;
-import lk.ijse.helloshoesbackend.Enum.ItemStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

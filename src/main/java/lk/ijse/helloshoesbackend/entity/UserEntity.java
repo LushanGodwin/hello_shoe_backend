@@ -30,8 +30,6 @@ public class UserEntity implements UserDetails {
     private String email;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToOne(mappedBy = "userEntity", cascade = CascadeType.ALL)
-    private EmployeeEntity employeeEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

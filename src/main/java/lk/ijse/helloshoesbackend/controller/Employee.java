@@ -2,9 +2,9 @@ package lk.ijse.helloshoesbackend.controller;
 
 import jakarta.validation.Valid;
 import lk.ijse.helloshoesbackend.Enum.Gender;
-import lk.ijse.helloshoesbackend.Enum.Role;
 import lk.ijse.helloshoesbackend.Enum.Status;
 import lk.ijse.helloshoesbackend.dto.EmployeeDTO;
+import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.service.EmployeeService;
 import lk.ijse.helloshoesbackend.util.UtilMatters;
 import lombok.RequiredArgsConstructor;
@@ -15,122 +15,161 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Date;
+
 @RestController
 @RequestMapping("/api/v1/employee")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:63342")
 public class Employee {
 
     private final EmployeeService employeeService;
-
     @GetMapping("/health")
     public String healthCheck(){
-        return "Employee Ok";
+        return "Employee Health Check";
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public EmployeeDTO saveEmployee(@Valid
-                                          @RequestPart ("employee_name") String employee_name,
-                                          @RequestPart ("profile_picture") String profile_picture,
+    public ResponseEntity<?> saveEmployee(@Valid
+                                          @RequestPart ("employeeName") String employeeName,
+                                          @RequestPart ("profilePic") String profilePic,
                                           @RequestPart ("gender") String gender,
                                           @RequestPart ("status") String status,
                                           @RequestPart ("designation") String designation,
-                                          @RequestPart ("access_role") String access_role,
-                                          @RequestPart ("dob") String dob,
-                                          @RequestPart ("attached_branch") String attached_branch,
-                                          @RequestPart ("address_line_01") String address_line_01,
-                                          @RequestPart ("address_line_02") String address_line_02,
-                                          @RequestPart ("address_line_03") String address_line_03,
-                                          @RequestPart ("address_line_04") String address_line_04,
+                                          @RequestPart ("dateOfBirth") String dateOfBirth,
+                                          @RequestPart ("attachedBranch") String branchId,
+                                          @RequestPart ("address1") String address1,
+                                          @RequestPart ("address2") String address2,
+                                          @RequestPart ("address3") String address3,
+                                          @RequestPart ("address4") String address4,
                                           @RequestPart ("postalCode") String postalCode,
-                                          @RequestPart ("contact_no") String contact_no,
+                                          @RequestPart ("contactNo") String contactNo,
                                           @RequestPart ("email") String email,
-                                          @RequestPart ("name_of_the_guardian") String name_of_the_guardian,
-                                          @RequestPart ("emergency_contact_no") String emergency_contact_no,
-                                          Errors errors){
-        if (errors.hasFieldErrors()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                                          @RequestPart ("emergencyContactName") String emergencyContactName,
+                                          @RequestPart ("emergencyContact") String emergencyContact,
+                                          @RequestPart ("dateOfJoin") String dateOfJoin,
+                                          Errors errors) {
+        if (errors.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    errors.getFieldErrors().get(0).getDefaultMessage());
         }
+
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setEmployee_name(employee_name);
-        employeeDTO.setProfile_picture(UtilMatters.convertToBase64(profile_picture));
+        employeeDTO.setEmployeeName(employeeName);
+        employeeDTO.setPic(UtilMatters.convertToBase64(profilePic));
         employeeDTO.setGender(Gender.valueOf(gender));
         employeeDTO.setStatus(Status.valueOf(status));
         employeeDTO.setDesignation(designation);
-        employeeDTO.setAccess_role(Role.valueOf(access_role));
-        employeeDTO.setDob(dob);
-        employeeDTO.setAttached_branch(attached_branch);
-        employeeDTO.setAddress_line_01(address_line_01);
-        employeeDTO.setAddress_line_02(address_line_02);
-        employeeDTO.setAddress_line_03(address_line_03);
-        employeeDTO.setAddress_line_04(address_line_04);
+        employeeDTO.setDateOfBirth(Date.valueOf(dateOfBirth));
+        employeeDTO.setBranchId(branchId);
+        employeeDTO.setAddress1(address1);
+        employeeDTO.setAddress2(address2);
+        employeeDTO.setAddress3(address3);
+        employeeDTO.setAddress4(address4);
         employeeDTO.setPostalCode(postalCode);
-        employeeDTO.setContact_no(contact_no);
+        employeeDTO.setContactNo(contactNo);
         employeeDTO.setEmail(email);
-        employeeDTO.setName_of_the_guardian(name_of_the_guardian);
-        employeeDTO.setEmergency_contact_no(emergency_contact_no);
+        employeeDTO.setEmergencyContact(emergencyContact);
+        employeeDTO.setEmergencyContactName(emergencyContactName);
+        employeeDTO.setDateOfJoin(Date.valueOf(dateOfJoin));
 
-        return employeeService.saveEmployee(employeeDTO);
+        try {
+            employeeService.saveEmployee(employeeDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Employee Details saved Successfully.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Employee saved Unsuccessfully.\nMore Details\n"+exception);
+        }
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}",produces = "application/json")
     public ResponseEntity<?> getEmployee(@PathVariable ("id") String id){
-        return ResponseEntity.ok(employeeService.getEmployee(id));
+        try {
+            return ResponseEntity.ok(employeeService.getEmployee(id));
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Employee Details fetched Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 
     @GetMapping(produces = "application/json")
-    public ResponseEntity<?> getAllEmployee(){
-        return ResponseEntity.ok(employeeService.getAllEmployee());
+    public ResponseEntity<?> getEmployee(){
+        try {
+            return ResponseEntity.ok(employeeService.getAllEmployees());
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employees not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Employees Details fetched Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 
-    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateEmployee(@PathVariable ("id") String id,@Valid
-                                            @RequestPart ("employee_name") String employee_name,
-                                            @RequestPart ("profile_picture") String profile_picture,
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateEmployee(@PathVariable ("id") String id,
+                                            @Valid
+                                            @RequestPart ("employeeName") String employeeName,
+                                            @RequestPart ("profilePic") String profilePic,
                                             @RequestPart ("gender") String gender,
                                             @RequestPart ("status") String status,
                                             @RequestPart ("designation") String designation,
-                                            @RequestPart ("access_role") String access_role,
-                                            @RequestPart ("dob") String dob,
-                                            @RequestPart ("attached_branch") String attached_branch,
-                                            @RequestPart ("address_line_01") String address_line_01,
-                                            @RequestPart ("address_line_02") String address_line_02,
-                                            @RequestPart ("address_line_03") String address_line_03,
-                                            @RequestPart ("address_line_04") String address_line_04,
+                                            @RequestPart ("dateOfBirth") String dateOfBirth,
+                                            @RequestPart ("address1") String address1,
+                                            @RequestPart ("address2") String address2,
+                                            @RequestPart ("address3") String address3,
+                                            @RequestPart ("address4") String address4,
                                             @RequestPart ("postalCode") String postalCode,
-                                            @RequestPart ("contact_no") String contact_no,
-                                            @RequestPart ("email") String email,
-                                            @RequestPart ("name_of_the_guardian") String name_of_the_guardian,
-                                            @RequestPart ("emergency_contact_no") String emergency_contact_no,
-                                            Errors errors ){
-        if (errors.hasFieldErrors()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+                                            @RequestPart ("contactNo") String contactNo,
+                                            @RequestPart ("emergencyContactName") String emergencyContactName,
+                                            @RequestPart ("emergencyContact") String emergencyContact,
+                                            Errors errors) {
+        if (errors.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    errors.getFieldErrors().get(0).getDefaultMessage());
         }
 
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setEmployee_name(employee_name);
-        employeeDTO.setProfile_picture(UtilMatters.convertToBase64(profile_picture));
+        employeeDTO.setEmployeeName(employeeName);
+        employeeDTO.setPic(profilePic);
         employeeDTO.setGender(Gender.valueOf(gender));
         employeeDTO.setStatus(Status.valueOf(status));
         employeeDTO.setDesignation(designation);
-        employeeDTO.setAccess_role(Role.valueOf(access_role));
-        employeeDTO.setDob(dob);
-        employeeDTO.setAttached_branch(attached_branch);
-        employeeDTO.setAddress_line_01(address_line_01);
-        employeeDTO.setAddress_line_02(address_line_02);
-        employeeDTO.setAddress_line_03(address_line_03);
-        employeeDTO.setAddress_line_04(address_line_04);
+        employeeDTO.setDateOfBirth(Date.valueOf(dateOfBirth));
+        employeeDTO.setAddress1(address1);
+        employeeDTO.setAddress2(address2);
+        employeeDTO.setAddress3(address3);
+        employeeDTO.setAddress4(address4);
         employeeDTO.setPostalCode(postalCode);
-        employeeDTO.setContact_no(contact_no);
-        employeeDTO.setEmail(email);
-        employeeDTO.setName_of_the_guardian(name_of_the_guardian);
-        employeeDTO.setEmergency_contact_no(emergency_contact_no);
+        employeeDTO.setContactNo(contactNo);
+        employeeDTO.setEmergencyContact(emergencyContact);
+        employeeDTO.setEmergencyContactName(emergencyContactName);
 
-        employeeService.updateEmployee(id,employeeDTO);
-
+        try {
+            employeeService.updateEmployee(id,employeeDTO);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Employee Details Updated Successfully.");
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Employee Details Updated Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}")
-    public boolean deleteEmployee(@PathVariable ("id") String id){
-        return employeeService.deleteEmployee(id);
+    public ResponseEntity<String> deleteCustomer(@PathVariable ("id") String id){
+        try {
+            employeeService.deleteEmployee(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Employee Details deleted Successfully.");
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Employee Details deleted Unsuccessfully.\nMore Reason\n"+exception);
+        }
     }
 }

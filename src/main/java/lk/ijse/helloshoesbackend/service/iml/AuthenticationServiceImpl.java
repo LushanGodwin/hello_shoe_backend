@@ -1,12 +1,16 @@
 package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
+import lk.ijse.helloshoesbackend.Enum.Status;
+import lk.ijse.helloshoesbackend.Enum.Role;
+import lk.ijse.helloshoesbackend.dto.EmployeeDTO;
 import lk.ijse.helloshoesbackend.dto.UserDTO;
 import lk.ijse.helloshoesbackend.entity.UserEntity;
 import lk.ijse.helloshoesbackend.secureAndResponse.response.JwtAuthResponse;
 import lk.ijse.helloshoesbackend.secureAndResponse.secure.SignIn;
 import lk.ijse.helloshoesbackend.secureAndResponse.secure.SignUp;
 import lk.ijse.helloshoesbackend.service.AuthenticationService;
+import lk.ijse.helloshoesbackend.service.EmployeeService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +21,8 @@ import lk.ijse.helloshoesbackend.repository.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -30,6 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final EmployeeService employeeService;
 
     @Override
     public JwtAuthResponse signUp(SignUp signUp) {
@@ -40,6 +47,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .role(signUp.getRole())
                 .build();
         UserEntity saveUser = userDao.save(mapping.toUserEntity(userDTO));
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setEmail(signUp.getEmail());
+        employeeDTO.setDesignation((signUp.getRole().equals(Role.ADMIN))?"Manager":null);
+        employeeDTO.setBranchId(signUp.getBranchId());
+        employeeDTO.setStatus(Status.LOW);
+        employeeDTO.setDateOfJoin(Date.valueOf(LocalDate.now()));
+        employeeService.saveEmployee(employeeDTO);
         String generateToken = jwtService.generateToken(saveUser);
         return JwtAuthResponse.builder().token(generateToken).build();
     }

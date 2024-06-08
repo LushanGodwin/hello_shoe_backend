@@ -1,5 +1,6 @@
 package lk.ijse.helloshoesbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lk.ijse.helloshoesbackend.Enum.Gender;
 import lk.ijse.helloshoesbackend.Enum.Level;
@@ -53,6 +54,7 @@ public class CustomerEntity {
 
     private Timestamp purchase_time_date;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customerEntity",cascade = CascadeType.ALL)
     private List<OrderEntity> orderEntities;
 }

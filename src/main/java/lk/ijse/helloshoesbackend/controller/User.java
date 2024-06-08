@@ -1,6 +1,7 @@
 package lk.ijse.helloshoesbackend.controller;
 import lk.ijse.helloshoesbackend.dto.BranchDTO;
 import lk.ijse.helloshoesbackend.exception.InvalidException;
+import lk.ijse.helloshoesbackend.exception.NotFoundException;
 import lk.ijse.helloshoesbackend.service.AuthenticationService;
 
 import lk.ijse.helloshoesbackend.secureAndResponse.response.JwtAuthResponse;
@@ -57,6 +58,18 @@ public class User {
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
                     body("Internal server error | New Branch Added Unsuccessfully.\nMore Details\n"+exception);
+        }
+    }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<?> getBranches(){
+        try {
+            return ResponseEntity.ok(branchService.getAllBranches());
+        } catch (NotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Branches not found.");
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).
+                    body("Internal server error | Branches Details fetched Unsuccessfully.\nMore Reason\n"+exception);
         }
     }
 }

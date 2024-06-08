@@ -1,7 +1,7 @@
 package lk.ijse.helloshoesbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lk.ijse.helloshoesbackend.Enum.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,5 +32,6 @@ public class ItemEntity {
     @JoinColumn(name = "varietyCode",nullable = false)
     private VarietyEntity varietyEntity;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "itemEntity",cascade = CascadeType.ALL)
     private List<StockEntity> stockEntities;}

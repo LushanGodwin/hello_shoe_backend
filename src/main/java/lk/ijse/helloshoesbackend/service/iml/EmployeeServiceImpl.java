@@ -2,15 +2,17 @@ package lk.ijse.helloshoesbackend.service.iml;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.helloshoesbackend.dto.EmployeeDTO;
+import lk.ijse.helloshoesbackend.entity.BranchEntity;
 import lk.ijse.helloshoesbackend.entity.EmployeeEntity;
 import lk.ijse.helloshoesbackend.entity.UserEntity;
 import lk.ijse.helloshoesbackend.exception.NotFoundException;
+import lk.ijse.helloshoesbackend.repository.BranchDao;
 import lk.ijse.helloshoesbackend.repository.EmployeeDao;
 import lk.ijse.helloshoesbackend.repository.UserDao;
 import lk.ijse.helloshoesbackend.service.EmployeeService;
 import lk.ijse.helloshoesbackend.util.Mapping;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,87 +22,91 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-    private final EmployeeDao employeeDao;
-    private final Mapping mapping;
-    private final UserDao userDao;
+    @Autowired
+    private EmployeeDao employeeDao;
+    @Autowired
+    private Mapping convert;
+    @Autowired
+    private BranchDao branchDao;
+    @Autowired
+    private UserDao userDao;
     @Override
-    public EmployeeDTO saveEmployee(EmployeeDTO employeeDTO) {
-        employeeDTO.setEmployeeCode(getNextEmployeeCode());
-        EmployeeEntity employeeEntity = mapping.toEmployeeEntity(employeeDTO);
+    public void saveEmployee(EmployeeDTO employeeDTO) {
+        employeeDTO.setEmployeeCode(generateNextEmployeeId());
+        EmployeeEntity employeeEntity = convert.toEmployeeEntity(employeeDTO);
 
         String email = employeeDTO.getEmail();
         Optional<UserEntity> byEmail = userDao.findByEmail(email);
 
-        if (byEmail == null){
+        String branchId = employeeDTO.getBranchId();
+        Optional<BranchEntity> byBranch = branchDao.findById(branchId);
+
+        if (byEmail == null) {
             throw new NotFoundException("User Not Found");
         }
 
-        UserEntity user = new UserEntity();
-        user.setUserId(byEmail.get().getUserId());
-        user.setEmail(email);
-        user.setPassword(byEmail.get().getPassword());
-        user.setRole(byEmail.get().getRole());
+        if (byBranch == null){
+            throw new NotFoundException("Branch Not Found");
+        }
 
-        employeeEntity.setUserEntity(user);
-        return mapping.toEmployeeDTO(Optional.of(employeeDao.save(employeeEntity)));
+        UserEntity newUserEntity = new UserEntity();
+        newUserEntity.setUserId(byEmail.get().getUserId());
+        newUserEntity.setEmail(email);
+        newUserEntity.setPassword(byEmail.get().getPassword());
+        newUserEntity.setRole(byEmail.get().getRole());
+
+        employeeEntity.setUserEntity(newUserEntity);
+        employeeEntity.setBranch(byBranch.get());
+
+        employeeDao.save(employeeEntity);
     }
 
     @Override
     public EmployeeDTO getEmployee(String id) {
-        if (!employeeDao.existsById(id)){
-            throw new NotFoundException("Employee Not Found");
-        }
-        return mapping.toEmployeeDTO(employeeDao.findById(id));
+        if(!employeeDao.existsById(id)){throw new NotFoundException("Employee Not Found");}
+        return convert.toEmployeeDTO(Optional.ofNullable(employeeDao.findById(id).orElse(null)));
     }
 
     @Override
-    public List<EmployeeDTO> getAllEmployee() {
-        return mapping.toEmployeeDTOList(employeeDao.findAll());
+    public List<EmployeeDTO> getAllEmployees() {
+        return convert.toEmployeeDTOList(employeeDao.findAll());
     }
 
     @Override
     public void updateEmployee(String id, EmployeeDTO employeeDTO) {
-        if (!employeeDao.existsById(id)){
-            throw new NotFoundException("Employee not found");
-        }
+        if(!employeeDao.existsById(id)){throw new NotFoundException("Employee Not Found");}
         Optional<EmployeeEntity> employeeEntity = employeeDao.findById(id);
-        EmployeeEntity employeeEntity1 = employeeEntity.get();
-        employeeEntity1.setEmployee_name(employeeDTO.getEmployee_name());
-        employeeEntity1.setProfile_picture(employeeDTO.getProfile_picture());
-        employeeEntity1.setGender(employeeDTO.getGender());
-        employeeEntity1.setStatus(employeeDTO.getStatus());
-        employeeEntity1.setDesignation(employeeDTO.getDesignation());
-        employeeEntity1.setAccess_role(employeeDTO.getAccess_role());
-        employeeEntity1.setDob(employeeDTO.getDob());
-        employeeEntity1.setAttached_branch(employeeDTO.getAttached_branch());
-        employeeEntity1.setAddress_line_01(employeeDTO.getAddress_line_01());
-        employeeEntity1.setAddress_line_02(employeeDTO.getAddress_line_02());
-        employeeEntity1.setAddress_line_03(employeeDTO.getAddress_line_03());
-        employeeEntity1.setAddress_line_04(employeeDTO.getAddress_line_04());
-        employeeEntity1.setPostalCode(employeeDTO.getPostalCode());
-        employeeEntity1.setContact_no(employeeDTO.getContact_no());
-        employeeEntity1.setEmail(employeeDTO.getEmail());
-        employeeEntity1.setName_of_the_guardian(employeeDTO.getName_of_the_guardian());
-        employeeEntity1.setEmergency_contact_no(employeeDTO.getEmergency_contact_no());
-        employeeDao.save(mapping.toEmployeeEntity(employeeDTO));
+        EmployeeEntity employee = employeeEntity.get();
+        employee.setEmployeeName(employeeDTO.getEmployeeName());
+        employee.setPic(employeeDTO.getPic());
+        employee.setGender(employeeDTO.getGender());
+        employee.setStatus(employeeDTO.getStatus());
+        employee.setDesignation(employeeDTO.getDesignation());
+        employee.setDateOfBirth(employeeDTO.getDateOfBirth());
+        employee.setAddress1(employeeDTO.getAddress1());
+        employee.setAddress2(employeeDTO.getAddress2());
+        employee.setAddress3(employeeDTO.getAddress3());
+        employee.setAddress4(employeeDTO.getAddress4());
+        employee.setPostalCode(employeeDTO.getPostalCode());
+        employee.setContactNo(employeeDTO.getContactNo());
+        employee.setEmergencyContactName(employeeDTO.getEmergencyContactName());
+        employee.setEmergencyContact(employeeDTO.getEmergencyContact());
     }
 
     @Override
-    public boolean deleteEmployee(String id) {
-        if (!employeeDao.existsById(id)){
-            throw new NotFoundException("Employee not found");
-        }
+    public void deleteEmployee(String id) {
+        if(!employeeDao.existsById(id)){throw new NotFoundException("Employee Not Found");}
         employeeDao.deleteById(id);
-        return true;
     }
 
-
-    private String getNextEmployeeCode() {
-        EmployeeEntity employeeEntity = employeeDao.findFirstByOrderByEmployeeCodeDesc();
-        return (employeeEntity != null)
-                ? String.format("Emp-%03d",
-                Integer.parseInt(employeeEntity.getEmployeeCode()
-                        .replace("Emp-", "")) + 1)
-                : "Emp-001";
+    public String generateNextEmployeeId() {
+        EmployeeEntity lastEmployee = employeeDao.findFirstByOrderByEmployeeCodeDesc();
+        if (lastEmployee == null) {
+            return "Emp-001";
+        }
+        String lastEmployeeId = lastEmployee.getEmployeeCode();
+        int lastId = Integer.parseInt(lastEmployeeId.split("-")[1]);
+        int nextId = lastId + 1;
+        return "Emp-" + String.format("%03d", nextId);
     }
 }

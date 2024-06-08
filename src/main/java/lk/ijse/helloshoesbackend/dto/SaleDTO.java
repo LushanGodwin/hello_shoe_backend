@@ -8,44 +8,44 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaleDTO implements SuperDTO{
     @NotBlank(message = "Item code is required")
-    private String item_code;
+    private String itemCode;
 
     @NotBlank(message = "Order number is required")
-    private String order_number;
+    private String orderNumber;
 
-    private String customer_code;
+    private String customerId;
 
     @NotBlank(message = "Item description is required")
-    private String item_description;
+    private String itemDescription;
 
     @Positive(message = "Size must be a positive integer")
-    private Integer size;
+    private int size;
 
     @PositiveOrZero(message = "Unit price must be a positive number")
-    private double unit_price;
+    private double unitPrice;
 
     @Positive(message = "Item quantity must be a positive integer")
-    private Integer item_qty;
+    private int itemQuantity;
 
     @PositiveOrZero(message = "Total price must be a positive number")
-    private double total_price;
+    private double totalPrice;
 
     @NotNull(message = "Purchase date is required")
-    private Date purchase_date;
+    private Date purchaseDate;
 
     @NotBlank(message = "Payment method is required")
-    private String payment_method;
+    private String paymentMethod;
 
     @PositiveOrZero(message = "Added points must be a positive number")
-    private double added_points;
+    private double addedPoints;
 
     @NotBlank(message = "Cashier name is required")
-    private String cashier_name;
+    private String cashierName;
 }

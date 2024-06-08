@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EmployeeDao extends JpaRepository<EmployeeEntity,String> {
     EmployeeEntity findFirstByOrderByEmployeeCodeDesc();
+
+    EmployeeEntity findByEmail(String email);
 }

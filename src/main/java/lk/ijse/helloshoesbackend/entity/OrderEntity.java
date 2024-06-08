@@ -1,29 +1,35 @@
 package lk.ijse.helloshoesbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lk.ijse.helloshoesbackend.Enum.PaymentMethod;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.sql.Timestamp;
-import java.util.List;
 
+@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "orders")
-public class OrderEntity {
+public class OrderEntity{
     @Id
     private String orderNo;
     private Timestamp purchasedDate;
-    private int addedPoints;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+    private double totalAmount;
+    private double paidAmount;
+    private String bankName;
+    private String bankNo;
 
     @ManyToOne
-    @JoinColumn(name = "cutomer_code",nullable = false)
+    @JoinColumn(name = "cutomerId",nullable = false)
     private CustomerEntity customerEntity;
 
     @ManyToOne
     @JoinColumn(name = "email",nullable = false)
     private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "orderEntity",cascade = CascadeType.ALL)
-    private List<StockSizeOrderDetailsEntity> stockSizeOrderDetailsEntities ;
+
 }

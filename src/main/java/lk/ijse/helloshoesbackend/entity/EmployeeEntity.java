@@ -1,44 +1,50 @@
 package lk.ijse.helloshoesbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.helloshoesbackend.Enum.Gender;
-import lk.ijse.helloshoesbackend.Enum.Role;
 import lk.ijse.helloshoesbackend.Enum.Status;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+import java.sql.Date;
+
+@RequiredArgsConstructor
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "employee")
-public class EmployeeEntity {
+public class EmployeeEntity{
     @Id
     private String employeeCode;
-    private String employee_name;
+    private String employeeName;
     @Column(columnDefinition = "LONGTEXT")
-    private String profile_picture;
+    private String pic;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Enumerated(EnumType.STRING)
     private Status status;
     private String designation;
-    @Enumerated(EnumType.STRING)
-    private Role access_role;
-    private String dob;
-    private String attached_branch;
-    private String address_line_01;
-    private String address_line_02;
-    private String address_line_03;
-    private String address_line_04;
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
+    @Temporal(TemporalType.DATE)
+    private Date dateOfJoin;
+    private String address1;
+    private String address2;
+    private String address3;
+    private String address4;
     private String postalCode;
-    private String contact_no;
+    private String contactNo;
     private String email;
-    private String name_of_the_guardian;
-    private String emergency_contact_no;
+    private String emergencyContactName;
+    private String emergencyContact;
 
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL)
     private UserEntity userEntity;
+
+    @JsonManagedReference
+    @ManyToOne
+    @JoinColumn(name = "branchId", nullable = true)
+    private BranchEntity branch;
 
 }

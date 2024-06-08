@@ -5,13 +5,13 @@ import lk.ijse.helloshoesbackend.dto.EmployeeDTO;
 import java.util.List;
 
 public interface EmployeeService {
-    EmployeeDTO saveEmployee(EmployeeDTO employeeDTO);
+    void saveEmployee(EmployeeDTO employeeDTO);
 
     EmployeeDTO getEmployee(String id);
 
-    List<EmployeeDTO> getAllEmployee();
+    void updateEmployee(String id,EmployeeDTO employeeDTO);
 
-    void updateEmployee(String id, EmployeeDTO employeeDTO);
+    void deleteEmployee(String id);
 
-    boolean deleteEmployee(String id);
+    List<EmployeeDTO> getAllEmployees();
 }

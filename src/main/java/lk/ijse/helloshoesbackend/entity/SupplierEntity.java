@@ -1,5 +1,6 @@
 package lk.ijse.helloshoesbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lk.ijse.helloshoesbackend.Enum.Category;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class SupplierEntity {
     private String contact_no_01;
     private String contact_no_02;
     private String email;
+    @JsonIgnore
     @OneToMany(mappedBy = "supplierEntity",cascade = CascadeType.ALL)
     private List<StockEntity> stockEntities;
 }

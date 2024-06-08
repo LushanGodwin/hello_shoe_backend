@@ -330,6 +330,7 @@ public class Inventory {
         }
     }
 
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/sizeSave")
     public ResponseEntity<?> saveSize(@Validated @RequestBody SizeDTO sizeDTO,
